@@ -1,0 +1,53 @@
+extends admin.pug
+
+block data
+
+    .category-block
+
+        h4 Výchozí kategorie
+        
+        .items.items-1
+            .item-block.item-title
+                span Název kategorie
+                span URL zápis
+                span Akce
+            - for (var x = 0; x < 10; x++)
+                .item-block
+                    input(type="text", value="" + categories[x].cz, spellcheck="false")
+                    input(type="text", value="" + categories[x].ur, spellcheck="false")
+                    button.cat-can(value="" + categories[x]._id) Upravit
+
+    .category-block
+
+        h4 Další kategorie
+
+        .items.items-2
+            if categories.length != 11
+                .item-block.item-title
+                    span Název kategorie
+                    span URL zápis
+                    span Akce
+            
+                - for (var x = 10; x < categories.length; x++)
+                    if categories[x].ur !== "nezarazene"
+                        .item-block
+                            input(type="text", value="" + categories[x].cz, spellcheck="false")
+                            input(type="text", value="" + categories[x].ur, spellcheck="false")
+                            button.cat-can(value="" + categories[x]._id) Upravit
+                            button.cat-del(value="" + categories[x]._id) Smazat
+
+            else
+                .item-block.item-block-empty
+                    span Žádné přidané kategorie...
+           
+    .category-block
+     
+        h4 Nová kategorie
+
+        .items.items-3
+            .item-block
+                input#i31(type="text", value="", minlength="5", maxlength="20", spellcheck="false", placeholder="Název kategorie")
+                input#i32(type="text", value="", minlength="5", maxlength="20", spellcheck="false", placeholder="URL zápis")
+                button#cat-sav(value="-1") Uložit
+
+    script(src="/public/category.js")

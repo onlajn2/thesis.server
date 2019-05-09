@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+html(lang="cs")
+    head
+        meta(charset="UTF-8")
+        meta(name="viewport", content="width=device-width, initial-scale=1.0")
+        meta(http-equiv="X-UA-Compatible", content="ie=edge")
+        link(rel="stylesheet", href="/public/styles/style.css")
+        script(src="/public/script.js")
+        title Administrace
+    body
+        header
+            .left-side
+                a(href="/admin") Administrace
+                a(href="/admin/log") Log
+                a(href="/admin/kategorie") Kategorie
+                a(href="/admin/delete") Smazat články
+                a#hidden-menu Menu
+
+            .right-side
+                a(href="/logout") Odhlásit se
+
+        aside
+            ul
+                li
+                    a(href="/admin/pridat") + Přidat nový deník
+                - for (var x = 0; x < journals.length; x++)
+                    li
+                        a(href="/admin/denik/" + journals[x])= journals[x]
+
+        aside#hidden
+            .menu
+                .top
+                    span#menu-cls(title="Zavřít")
+                    span.only-text Menu
+                
+                a(href="/admin") Administrace
+                a(href="/admin/log") Log
+                a(href="/admin/kategorie") Kategorie
+                a(href="/admin/delete") Smazat články
+
+            ul
+                li
+                    a(href="/admin/pridat") + Přidat nový deník
+                - for (var x = 0; x < journals.length; x++)
+                    li
+                        a(href="/admin/denik/" + journals[x])= journals[x]
+        
+        block page-content

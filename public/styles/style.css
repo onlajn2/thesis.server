@@ -1,0 +1,917 @@
+html, body {
+    height: 100%;
+    max-height: 100%;
+    max-width: 100%;
+    width: 100%;
+    background-color: #383f48;
+    padding: 0; margin: 0;
+    font-family: sans-serif;
+    position: relative;
+    overflow: hidden;
+}
+body {
+    display: grid;
+    grid-template-rows: 2.25em 1fr;
+    grid-template-columns: 12em 1fr;
+}
+* {
+    box-sizing: border-box;
+}
+
+/* HEADER */
+header {
+    grid-column: span 2;
+    height: 2.25em;
+    line-height: 2.25em;
+    width: 100%;
+    max-width: 100%;
+    position: relative;
+    background-color: #1e88e5;
+    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.2);
+}
+header a {
+    display: block;
+    height: 100%;
+    font-size: 0.95em;
+    color: #dddddd;
+    text-decoration: none;
+    padding: 0 1em;
+    float: left;
+}
+header a:hover {
+    background-color: #0f569f;
+}
+header .left-side {
+    float: left;
+}
+header .right-side {
+    float: right;
+}
+#hidden-menu {
+    cursor: pointer;
+    display: none;
+}
+
+/* ASIDE */
+aside {
+    background-color: #272c33;
+    width: 12em;
+    margin: 0; padding: 0;
+    grid-column: 1;
+    overflow: hidden;
+    overflow-y: auto;
+}
+aside ul {
+    list-style-type: none;
+    margin: 0; padding: 0;
+    overflow: hidden;
+    margin-top: 1em;
+}
+aside ul li a {
+    text-decoration: none;
+    color: #bbbbbb;
+    width: 100%;
+    height: 1.5em;
+    line-height: 1.5em;
+    font-size: 0.9em;
+    display: block;
+    padding: 0;
+    padding-left: 0.75em;
+}
+aside ul li:first-of-type {
+    margin-bottom: 0.5em;
+}
+aside ul li a:hover, aside ul li a:focus,
+aside ul li.active a {
+    color: #1e88e5;
+    border-left: solid 3px #1e88e5;
+}
+
+aside#hidden {
+    grid-column: unset;
+    position: absolute;
+    max-height: 100%;
+    z-index: 1455;
+    left: -12em;
+    -webkit-transition: left 0.25s ease-in;
+    transition: left 0.25s ease-in;
+}
+aside#hidden.visib {
+    left: 0;
+}
+aside#hidden ul {
+    margin-top: 0.25em;
+}
+aside#hidden ul li a {
+    height: 2em;
+    line-height: 2em;
+    font-size: 0.95em;
+}
+aside#hidden .menu {
+    width: 100%;
+
+}
+aside#hidden .menu .top {
+    width: 100%;
+    height: 2.25em;
+    line-height: 2.25em;
+    color: #eeeeee;
+}
+aside#hidden .menu .top #menu-cls {
+    width: 2.25em;
+    height: 2.25em;
+    float: right;
+    display: block;
+    text-align: center;
+    background-color: transparent;
+    cursor: pointer;
+}
+aside#hidden .menu .top #menu-cls::after {
+    content: "\00d7";
+    font-size: 1.5em;
+}
+aside#hidden .menu .top .only-text {
+    font-size: 0.9em;
+    text-transform: uppercase;
+    margin-left: 1em;
+}
+aside#hidden .menu > a {
+    display: block;
+    height: 2em;
+    width: 100%;
+    line-height: 2em;
+    padding: 0 1em;
+    color: #eeeeee;
+    text-decoration: none;
+    font-size: 0.9em;
+    background-color: #1a1a1a;
+}
+aside#hidden .menu > a:hover {
+    background-color: #272c33;
+}
+
+/*SCROLLBARS*/
+#sample-admin::-webkit-scrollbar,
+#content::-webkit-scrollbar,
+aside::-webkit-scrollbar {
+    width: 0.5em;
+}
+#sample-admin::-webkit-scrollbar-track,
+#content::-webkit-scrollbar-track,
+aside::-webkit-scrollbar-track {
+    background: transparent; 
+}
+#sample-admin::-webkit-scrollbar-thumb,
+aside::-webkit-scrollbar-thumb,
+#content::-webkit-scrollbar-thumb {
+    background: #222222;
+}
+#sample-admin::-webkit-scrollbar-thumb:hover,
+#sample-admin::-webkit-scrollbar-thumb:hover,
+aside::-webkit-scrollbar-thumb:hover,
+#content::-webkit-scrollbar-thumb:hover {
+    background: #272c33;
+}
+#sample-admin::-webkit-scrollbar-thumb {
+    background: #111111;
+}
+
+/* CONTENT */
+#content {
+    position: relative;
+    max-width: 100%;
+    width: 100%;
+    padding: 1em;
+    overflow: hidden;
+    overflow-y: auto;
+}
+#content #info-bar {
+    margin-bottom: 1em;
+    font-size: 0.8em;
+}
+#content #info-bar .oks {
+    color: #d10000;
+}
+#content #info-bar .ers {
+    color: #1d70e5;
+}
+span.group {
+    display: block;
+    width: 100%;
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+    padding-bottom: 0.25em;
+    font-size: 0.85em;
+    font-weight: bold;
+    color: #bbbbbb;
+    border-bottom: solid thin #bbbbbb;
+}
+.colms {
+    display: none;
+}
+.colms h2 {
+    padding: 0;
+    margin: 0;
+    margin-bottom: 0.75em;
+    color: #1e88e5;
+    font-weight: 500;
+    font-size: 1.4em;
+}
+.colm {
+    border-radius: 0.25em;
+    padding: 1em;
+    max-width: 20em;
+    width: 100%;
+    float: left;
+    background-color: #272c33;
+    margin-right: 1em;
+    margin-bottom: 1em;
+}
+.colm form .row {
+    width: 100%;
+}
+.colm form .row.line {
+    margin-bottom: 0.5em;
+}
+.colm form .row:after {
+    content: "";
+    clear: both;
+    display: table;
+}
+.colm form .row label {
+    color: #bbbbbb;
+    font-size: 0.75em;
+    width: 100%;
+    display: block;
+    margin-bottom: 0.25em;
+}
+.colm form .row label.fl {
+    width: auto;
+    float: left;
+    margin-top: 0.25em;
+    margin-right: 0.75em;
+}
+
+/* SPANS */
+span.req, span.req2 {
+    display: inline-block;
+    margin-left: 0.5em;
+}
+span.req::after {
+    content: "*";
+    color: #1d70e5;   
+}
+span.req2::after {
+    content: "**";
+    color: #1d70e5;  
+}
+span.tooltip {
+    float: right;
+    width: 1em;
+    height: 1em;
+    position: relative;
+    font-weight: 500;
+}
+span.tooltip span.toolicon {
+    border-radius: 50%;
+    display: block;
+    width: 1em;
+    height: 1em;
+    color: #ffffff;
+    text-align: center;
+    background-color: #1e88e5;
+}
+span.tooltip span.tooltext {
+    position: absolute;
+    padding: 0.5em;
+    min-width: 13em;
+    z-index: 1112;
+    width: 100%;
+    max-width: 16em;
+    top: 125%;
+    left: 50%;
+    transform: translateX(-50%);
+    border-radius: 0.15em;
+    overflow: hidden;
+    background-color: rgba(16, 16, 16, 0.8);
+    font-size: 1em;
+    display: none;
+}
+span.tooltip span.toolicon:hover + span.tooltext {
+    display: block;
+}
+
+/* INPUTY */
+.colm form .row input[type="radio"] {
+    float: left;
+    height: 1em;
+    width: 1em;
+    margin-bottom: 1em;
+}
+.colm form .row input[type="text"],
+.colm form .row input[type="url"] {
+    width: 100%;
+    font-size: 0.8em;
+    background-color: #383f48;
+    border: none;
+    margin-bottom: 1em;
+    padding: 0.5em;
+    color: #dddddd;
+}
+.colm form select, #mfile {
+    background-color: #383f48;
+    width: 100%;
+    color: #dddddd;
+    padding: 0.5em;
+    border: none;
+    margin-bottom: 1em;
+}
+#mfile {
+    background-color: #272c33;
+    width: auto;
+    padding: 0.5em 1em;
+    margin-right: 1em;
+}
+select[multiple] option::selection {
+    background: #272c33;;
+}
+select[multiple]::-webkit-scrollbar {
+    display: none;
+}
+.colm form textarea {
+    width: 100%;
+    background-color: #383f48;
+    font-family: sans-serif;
+    font-size: 0.8em;
+    color: #dddddd;
+    margin-bottom: 1em;
+    padding: 0.5em;
+    border: none;
+    resize: none;
+}
+.colm form textarea::-webkit-scrollbar {
+    display: none;
+}
+
+.colm button, #logbtn {
+    display: block;
+    width: 100%;
+    padding: 0.5em;
+    font-size: 0.8em;
+    border: none;
+    background-color: #383f48;
+    border-left: solid 3px #383f48;
+    color: #dddddd;
+    text-align: left;
+    margin-bottom: 1em;
+    cursor: pointer;
+
+}
+#logbtn {
+    border-left: none;
+    width: auto;
+    font-size: 0.85em;
+    padding: 0.5em 1em;
+    background-color: #1e88e5;
+    text-align: center;
+    display: inline-block;
+}
+
+#logbtn:hover {
+    background-color: #1d70e5;
+}
+.colm button:not(#sub-save):hover {
+    background-color: #31373f;
+    border-left: solid 3px #dddddd;
+}
+.colm button#sub-save {
+    background-color: #1e88e5;
+    border-left: none;
+    font-weight: bold;
+}
+.colm button#sub-save:hover {
+    background-color: #1d70e5;
+}
+
+span.info {
+    display: block;
+    width: 100%;
+    color: #1d70e5;
+    font-size: 0.7em;
+    font-style: italic;
+    margin-bottom: 0.2em;
+}
+
+
+/* TOOLS */
+#sample-admin {
+    position: fixed;
+    background-color: #1a1a1a;
+    background-color: #272c33;
+    max-width: 29.5em;
+    width: 100%;
+    height: 100%;
+    height: calc(100% - 2.5em);
+    right: -45em;
+    top: 2.25em;
+    transition: width .5s ease, right .5s ease ;
+    box-shadow: -2px 0px 0px -2px #1f1f1f;
+    overflow: hidden;
+    overflow-y: scroll;
+}
+
+#sample-admin.visible {
+    right: 0.5em;
+}
+#sample-admin .side-header {
+    padding-left: 1em;
+    line-height: 2.5em;
+    height: 2.5em;
+    width: 100%;
+    display: block;
+    background-color: #111111;
+    background-color: #1a1a1a;
+}
+#sample-admin .side-header h3 {
+    width: 50%;
+    float: left;
+    padding: 0;
+    margin: 0;
+    color: #dddddd;
+}
+#sample-admin .side-header span.close {
+    float: right;
+    display: block;
+    height: 2em;
+    width: 2em;
+    content: "X";
+    color: #dddddd;
+    cursor: pointer;
+}
+#sample-admin .side-content {
+    padding: 1em;
+    overflow: hidden;
+    overflow-y: auto;
+    color: #dddddd;
+}
+#sample-admin .side-content h3 {
+    margin: 0; padding: 0;
+    color: #1d70e5;
+}
+
+#sample-admin .side-content h5 {
+    margin: 0; padding: 0.25em 0;
+    margin-top: 1em;
+    color: #1e88e5;
+    
+}
+#sample-admin .side-content div.lin,
+#sample-admin .side-content span.lin {
+    font-size: 0.85em;
+}
+#sample-admin .side-content span.lin strong {
+    margin-left: 0.75em;
+}
+#sample-admin .side-content span.lin strong::before {
+    content: ">>> pro uživatele: ";
+    font-weight: normal;
+    color: #1e88e5;
+}
+#sample-admin .side-content span.lin p {
+    margin: 0;
+}
+
+.log-block {
+    display: none;
+    margin-top: 1em;
+    color: #dddddd;
+    line-height: 1.2em;
+    font-size: 0.8em;
+    background-color: #272c33;
+    padding: 1em;
+    overflow: hidden;
+    max-width: 100%;
+}
+.log-block > span {
+    display: block;
+    width: 100%;
+    line-height: 1.5em;
+}
+.linfo {
+    color: green;
+}
+.lerror {
+    color: #d10000;
+}
+
+/* articles admin */
+.log-block table {
+    width: 100%;
+    table-layout: auto;
+    overflow: hidden;
+}
+.log-block table tr:first-child {
+    background-color: black;
+    line-height: 1.6em;
+}
+.log-block table tr {
+    text-align: center;
+}
+.log-block table tr.visib {
+    display: table-row;
+}
+.log-block table tr.hidden {
+    display: none;
+}
+.log-block table tr:nth-child(2n) {
+    background-color: #383f48;
+}
+.log-block table tr:not(:first-child) td:first-child {
+    text-align: left;
+}
+.log-block table tr td {
+    padding: 0.25em 0.5em;
+    overflow: hidden;
+}
+.log-block table tr a {
+    text-decoration: none;
+    color: #1e88e5;
+}
+.log-block table tr a:hover {
+    text-decoration: underline;
+    color: #1d70e5;
+}
+.log-block table th {
+    position: relative;
+}
+.log-block table th:last-child {
+    width: 5em;
+}
+.log-block table th span {
+    float: left;
+    position: absolute;
+    left: 0.5em;
+    top: 50%;
+    transform: translateY(-50%);
+    text-transform: uppercase;
+    font-weight: normal;
+    background-color: black;
+}
+.log-block table #selectAll {
+    cursor: pointer;
+}
+.log-block table #selectAll:hover {
+    color: #1e88e5;
+}
+
+/* tools */
+.block-tool {
+    display: none;
+    margin: 1em 0;
+    color: #dddddd;
+    font-size: 0.8em;
+    background-color: #272c33;
+    padding: 1em;
+    line-height: 1.8em;
+}
+.block-tool:after {
+    clear: both; 
+    content: "";
+    display: table; 
+}
+.block-tool .empt {
+    float: left;
+}
+.block-tool .emptt {
+    float: right;
+}
+#sort {
+    float: left;
+    background-color: #383f48;
+    color: #dddddd;
+    border: none;
+    width: auto;
+    padding: 0.5em 0.8em;
+    margin-right: 1em;
+    font-size: 1em;
+    font-size: 0.9em;
+}
+#search {
+    float: left;
+    background-color: #383f48;
+    border: none;
+    padding: 0.56em 0.8em;
+    font-size: 1em;
+    color: #dddddd;
+    font-size: 0.9em;
+}
+#search::placeholder {
+    color: #aaaaaa;
+}
+#searb, #remsel, #remall {
+    float: left;
+    background-color: #1e88e5;
+    color: #dddddd;
+    border: none;
+    padding: 0.56em 0.8em;
+    font-size: 1em;
+    cursor: pointer;
+    font-size: 0.9em;
+}
+#searb:hover, #remsel:hover, #remall:hover {
+    background-color: #1d70e5;
+}
+#remsel, #remall {
+    float: right;
+}
+#remsel {
+    margin-left: 1em;
+}
+#delsear {
+    margin-left: 1em;
+    cursor: pointer;
+    border: none;
+    background: transparent;
+    color: #dddddd;
+    font-size: 0.75em;
+}
+
+/* delete journal */
+.colm #drop {
+    display: block;
+    width: 1em;
+    height: 1em;
+    background: transparent;
+    float: right;
+    margin: 0;
+    padding: 0;
+    cursor: pointer;
+    border: none;
+    background-image: url("/public/icons/del.svg");
+    background-position: center center;
+    background-repeat: no-repeat;
+}
+.colm #drop:hover {
+    background-image: url("/public/icons/del.a.svg");
+}
+
+/* main page*/
+
+#help {
+    background-color: #272c33;
+    padding: 1em;
+    color: #dddddd;
+}
+#help h1 {
+    margin: 0;
+    font-size: 1.5em;
+    display: block;
+    width: 100%;
+    margin-bottom: 0.5em;
+}
+#help h2 {
+    margin: 0.5em 0;
+    font-size: 1.3em;
+    display: block;
+    width: 100%;
+
+}
+#help ul {
+    padding: 0;
+    padding-left: 1em;
+    list-style-type: none;
+}
+#help li {
+    display: block;
+    width: 100%;
+    margin: 0; padding: 0;
+}
+#help p {
+    font-size: 0.8em;
+    margin: 0.25em 0;
+}
+#help h3 {
+    margin: 0;
+    cursor: pointer;
+    margin-top: 1em;
+    font-size: 1.15em;
+    display: block;
+    width: 100%;
+    background-color: #383f48;
+    padding: 0.25em 0.5em;
+}
+#help h4 {
+    color: #1e88e5;
+    font-size: 0.95em;
+    margin: 0;
+    margin-top: 0.75em;
+    margin-bottom: 0.5em;
+    font-weight: normal;
+}
+#help li p {
+    padding: 0 1.5em;
+}
+#help p a {
+    color: #1e88e5;
+    text-decoration: none;
+}
+#help p a:hover {
+    color: #1d70e5;
+}
+#help li p.p {
+    margin-top: 0.5em;
+    color: #bbbbbb;
+}
+
+/* LOADING ICON */
+.center-block {
+    display: block;
+    width: 100%;
+}
+.center-block-2 {
+    display: none;
+    width: 100%;
+}
+.fixed-block {
+    position: fixed;
+    z-index: 3333;
+    background-color: rgba(16, 16, 16, 0.8);
+    width: 100%;
+    height: 100%;
+    top: 0; left: 0;
+}
+.lds-dual-ring {
+    display: block;
+    width: 3em;
+    height: 3em;
+    margin: 0 auto;
+}
+.fixed-block .lds-dual-ring {
+    margin: auto;
+    margin-top: 2.5em;
+}
+.lds-dual-ring:after {
+    content: " ";
+    display: block;
+    width: 2em;
+    height: 2em;
+    margin: 1px;
+    border-radius: 50%;
+    animation: lds-dual-ring 1.2s linear infinite;
+    border: 5px solid #03a9f4;
+    border-color: #03a9f4 transparent #1e88e5 transparent;
+}
+@keyframes lds-dual-ring {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+.none {
+    display: none;
+}
+
+.mega-loading .lds-dual-ring {
+    display: none;
+    margin: auto;
+    width: 5em;
+    height: 5em;
+    margin-bottom: 0;
+}
+.mega-loading .lds-dual-ring:after {
+    content: " ";
+    display: block;
+    width: 4em;
+    height: 4em;
+    margin: 1px;
+    border-radius: 50%;
+    animation: lds-dual-ring 1.2s linear infinite;
+    border: 5px solid #03a9f4;
+    border-color: #03a9f4 transparent #1e88e5 transparent;
+}
+
+/*CATEGORY*/
+.category-block {
+    display: block;
+    background-color: #272c33;
+    padding: 1em;
+    margin-bottom: 1em;
+}
+.category-block h4 {
+    display: block;
+    width: 100%;
+    margin: 0;
+    margin-bottom: 0.5em;
+    color: #1d70e5;
+}
+.category-block .item-block {
+    max-width: 30em;
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr 4em;
+    grid-gap: 0.75em;
+    margin-bottom: 0.5em;
+}
+.category-block .item-block.item-title {
+    height: 1.8em;
+    width: 100%;
+    background-color: #000000;
+    color: #aaaaaa;
+    grid-template-columns: 1fr 1fr 4em;
+}
+.category-block .item-block.item-title span {
+    display: block;
+    width: 100%;
+    height: 1.8em;
+    line-height: 2em;
+    text-align: center;
+    font-size: 0.9em;
+    overflow: hidden;
+}
+.category-block .item-block-empty span {
+    font-size: 0.9em;
+    grid-column: span 2;
+    font-style: italic;
+    color: #aaaaaa;
+}
+.category-block .items input {
+    background-color: #aaaaaa;
+    height: 1.8em;
+    border: none;
+    padding: 0 0.5em;
+    min-width: 4em;
+}
+.item-block button {
+    background-color: #1e88e5;
+    color: #dddddd;
+    border: none;
+    cursor: pointer;
+    font-size: 0.8em;
+}
+.item-block button:hover {
+    background-color: #1d70e5;
+}
+.category-block .items-2 .item-block {
+    grid-template-columns: 1fr 1fr 4em 4em;
+}
+.category-block .items-2 .item-block.item-title {
+    grid-template-columns: 1fr 1fr 8.75em;
+}
+
+/*phones*/
+@media (max-width: 767px) {
+    body {
+        grid-template-columns: 1fr;
+    }
+    header {
+        grid-column: 1;
+    }
+    header .left-side a:not(#hidden-menu) {
+        display: none;
+    }
+    header .left-side #hidden-menu {
+        display: block;
+    }
+
+    aside:not(#hidden) {
+        display: none;
+    }
+    #content {
+        padding: 0.5em;
+    }
+    #help {
+        background-color: #272c33;
+        padding: 0.75em;
+        color: #dddddd;
+    }
+    .category-block {
+        padding: 0.75em;
+    }
+    .log-block {
+        padding: 0.75em;
+    }
+    #sample-admin {
+        max-width: 19.5em;
+    }
+}
+@media (max-width: 1023px) {
+    #sort {
+        margin-bottom: 1em;
+    }
+    .block-tool .empt {
+        margin-bottom: 1em;
+    }
+    .block-tool .emptt {
+        width: 100%;
+        float: left;
+    }
+    #remsel, #remall {
+        float: left;
+    }
+    #remsel {
+        margin-left: 0;
+        margin-right: 1em;
+    }
+}

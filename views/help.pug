@@ -1,0 +1,170 @@
+extends admin.pug
+
+block data
+    #help
+        h1 Vítejte v administraci
+
+        h2 Úprava deníků
+
+        p Úprava deníků se skládá ze dvou částí: <strong>Stahování</strong> a <strong>Parsování</strong>.
+        p Získávání článků probíhá postupně. V první fázi, ve Stahování, si server stáhne zdrojový kód webové stránky a z něj získá odkazy na články, případně i úvodní obrázky.
+        p Ve druhé fázi, v Parsování, server stahuje článek jeden po druhém a získává jeho obsah podle zadaných parametrů. Pokud narazí na článek, který je již v databázi, nebo který je příliš starý (více než týden), vykonávání končí.
+        p Po stáhnutí všech článků se pokračuje  stáhnutím další strany (pokud je to nastaveno).
+
+        p.aa Níže je uveden přehled a návod pro vyplnění jednotlivých parametrů.
+
+        h3 Stahování
+        .under
+            ul.parms
+                li
+                    h4 Název deníku
+                    p Název musí být unikátní. Měl by být složen z adresy deníku.
+                    p Povolené symboly jsou písmena bez diakritiky, čísla, tečka a pomlčka. Délka 4 - 25 znaků
+                    p.p Př.: <i>www.ukazkova-stranka.cz</i> -&gt; <b>ukazkova-stranka.cz</b>
+                li
+                    h4 Odkaz
+                    p Adresa deníku, kde se nachází výpis článků (odkazy na články).
+                    p.p Př.: <b>www.ukazkova-stranka.cz/clanky</b>
+                li
+                    h4 Kódování
+                    p Kódování výše uvedeného odkazu. Lze zjistit ze zdrojového kódu deníku.
+                    p.p Výchozí hodnota je <b>UTF-8</b> (podpora pouze několika formátů)
+                li
+                    h4 Stránkování
+                    p Stránkování udává, jestli jsou články deníku rozděleny na více stránkách.
+                    p.p Př.: <i>www.ukazkova-stranka.cz/clanky/1</i> , <i>www.ukazkova-stranka.cz/clanky/2</i> ,... (nastavení na <b>ANO</b>)
+                li
+                    h4 První strana
+                    p První strana (číslo), kde začíná výpis deníků
+                    p.p Př.: <i>www.ukazkova-stranka.cz/clanky/1</i> -&gt; Číslo stránky je tedy <b>1</b>
+                li
+                    h4 Další strany (+)
+                    p Číslo, které se přičte k první straně, aby se změnila adresa
+                    p.p Př.: <i>www.ukazkova-stranka.cz/clanky/1</i> , <i>www.ukazkova-stranka.cz/clanky/2</i> -&gt; (1 + <i>1</i> = 2, 2 + <i>1</i> = 3 ,...) -&gt; Hodnota je tedy <b>1</b>
+                li
+                    h4 Řetězec před číslem stránky
+                    p Jedná se o poslední řetězec (text), který je uveden před číslem strany v odkazu
+                    p.p Př.: <i>www.ukazkova-stranka.cz/clanky/1</i> -&gt; Řetezec je tedy <b>"/"</b>, může být i <b>"/clanky/"</b>,...
+                li
+                    h4 Rozdíl první strany od ostatních
+                    p Speciální případ. Pokud se první adresa liší od ostatních (např. neobsahuje číslo stránky), tak je při získání druhé stránky přidán následující řetězec.
+                    p.p Př.: první strana <i>www.ukazkova-stranka.cz</i>, druhá strana <i>www.ukazkova-stranka.cz/clanky/1</i> ,... -&gt; Hodnota je tedy <b>/clanky/</b> (Číslo první strany bude <b>0</b> - kvůli iteraci v každém kroku)
+                li
+                    h4 Omezení počtu článků na stránku
+                    p Speciální případ. Pokud na stránce nelze rozlišit odkazy článků, např. od odkazů na kategorie, tak omezí počet získaných odkazů.
+                    p.p Mějme stránku, kde je nalezeno 20 odkazů. Prvních 10 je odkaz na články, zbylých 10 je odkaz na kategorie. Hodnota je tedy <b>10</b>
+                li
+                    h4 Kategorie článků (seznam)
+                    p Kategorie, do kterých budou třízeny jednotlivé články. Musí být zadána alespoň jedna kategorie (označení při držení CTRL + klik).
+                li
+                    h4 Selektor
+                    p Nejedná se o parametr.
+                    p Selektor jede na jádru jQuery, konkrétně se jedná o doplněk <a href="https://cheerio.js.org/" target="_blank">Cheerio.js</a>.
+                    p Vyplňuje se pouze řetězec ve tvaru <i>TAG.ID.CLASS1.CLASS2</i> ,...
+                    p.p Př.: <i>h2</i>, <i>div h2</i>, <i>div &gt; h2</i>, <i>#content h2.title</i>, <i>#content h2#tit.left.top</i>,...
+                li
+                    h4 Obálka jednoho článku
+                    p Jedná se o selektor, který obaluje jeden článek (jeho odkaz, případně i úvodní obrázek). Těchto obálek je stejně, jako je odkazů na články
+                    p Tento parametr je povinný pouzev v případě, že zadáváte i úvodní obrázek.
+                    p.p Př.: <i>&lt;article&gt; &lt;a href="odkaz_na_clanek"&gt;Odkaz&lt;/a&gt; &lt;/article&gt;</i> -&gt; Hodnota je tedy <b>article</b>
+                li
+                    h4 Odkaz na článek
+                    p Selektor udávající odkaz na článek.
+                    p Odkaz musí být v obálce, nebo v tomhle parametru.
+                    p Pokud je na stránce 20 článků, tento selektor by měl najít všech 20 článků.
+                    p Pokud je zadána obálka článku, bude tento selektor hledán uvnitř obálky.
+                    p.p Př.: <i>&lt;article&gt; &lt;a href="odkaz_na_clanek"&gt;Odkaz&lt;/a&gt; &lt;/article&gt;</i> -&gt; Hodnota je tedy <b>a</b>
+                li
+                    h4 Obrázek
+                    p Selektor na úvodní obrázek článku. Nepovinný parametr.
+                    p Musí být zadána obálka článku (kvůli přiřazení k jednotlivým odkazům)
+                    p.p Př.: <b>img</b>
+                li
+                    h4 Atribut obrázku
+                    p Řetězec. Nepovinný parametr.
+                    p Atribut výše uvedeného selektoru obrázku. Výchozí hodnota je <b>src</b>
+                    p.p Př.: <b>src</b>, <b>data-src</b>,...
+                li
+                    h4 Více atributů
+                    p Speciální případ. Pokud obsah atributu obrázku obsahuje více odkazů, zatrhněte tohle políčko.
+                    p.p Př.: mějme atribut <i>data-src="odkaz1, odkaz2, odkaz3"</i> -&gt; v tomhle případě je zatrhnuté políčko
+                li
+                    h4 Sepciální články
+                    p Nepovinné. Platí stejná pravidla jako u obyčejného článku.
+                    p Na každé stránce se nejprve najdou tyto speciální články a následně pak obyčejné.
+                    p.p Př.: Použito v případě, že třeba první 3 články na stránce mají jiný HTML formát.
+
+
+        h3 Parsování
+        .under
+            ul.parms
+                li
+                    h4 Nadpis
+                    p Selektor, hledající titulek článku. Povinný parametr.
+                    p.p Př.: <b>h1</b>
+                li
+                    h4 Úvodní text
+                    p Selektor, hledající úvodní text. Nepovinný parametr.
+                    p Nastavuje se, pokud není úvodní text součástí obsahu.
+                    p.p Př.: <b>p.perex</b>
+                li
+                    h4 Je úvodní text součástí obsahu článku?
+                    p Pokud je úvodní text obsažen v obsahu článku (selektor níže)
+                    p Pokud je obsažen v obsahu článku, bude tento text zkrácen.
+                li
+                    h4 Datum
+                    p Selektor pro výběr data publikování článku (i času). Povinný parametr.
+                    p Tento parametr je kritický. Server převádí text vybraný selektorem na formát datumu. Pokud se to nezdaří, články nebudou uznány.
+                    p Podporováné formáty: podporuje textové formáty <i>(dnes, včera, před hodinou a právě teď)</i>, jinak <i>den. měsíc_slovy rok</i>, <i>den. měsíc. rok</i>
+                    p Server z řetězce vybere i čas, pokud řetězec obsahuje i formát: <i>hodina : minuty</i>
+                    p.p Př.: <b>.date</b>
+                li
+                    h4 Obrázek
+                    p Selektor hlavního obrázku článku.
+                    p.p Př.: <b>img</b>
+                li
+                    h4 Atribut obrázku
+                    p Atribut výše uvedeného selektoru obrázku. Výchozí hodnota je <i>src</i>
+                li
+                    h4 Obsah
+                    p Selektor obsahu článku. Povinný parametr.
+                    p Vybere pouze text (bez obrázků, odkazů, tabulek,...)
+                    p.p Př.: <b>div.content</b>
+                li
+                    h4 Selektory odstraněné z obsahu
+                    p Odstraní zvolené selektory uvnitř výše uvedeného selektoru. Zadání ve formě seznamu (selektor1, selektor2,...)
+                    p Pokud je v obsahu nalezen zadaný selektor, je z obsahu odstraněn (může se jednat o reklamy, titulek nebo jiný nepotřebný text)
+                    p.p Př.: <b>.title, div.reklama, span.author</b>
+                li
+                    h4 Tagy
+                    p Selektor hledající tagy článku. Nepovinný parametr. Pokud nebudou nalezeny nebo zadány žádné tagy, budou automaticky nalezeny z obsahu článku.
+                    p.p Př.: <b>a.tag</b> -&gt; najde <b>všechny</b> elementy a získá jejich text
+                li
+                    h4 Kategorie
+                    p Zadává se pouze v případě, že byla vybrána více jak jedna kategorie ve Stahování.
+                    p Články se do kategorií třídí podle části odkazu. Je zadáno ve formě seznamu <i>(řetězec1 : kategorie, řetězec2 : kategorie,...)</i>
+                    p Pokud se najde odkaz, který nepatří do žádné zadané kategorie, bude automaticky přiřazen do kategorie "Nezařazené".
+                    p.p Př.: <b><i>/domaci/ : Domácí, <i>/zahranici/ : Svět, <i>internet.php : Technologie</i></b>
+                li
+                    h4 Whitelist odkazů
+                    p Propustí pouze ty články, které obsahují jeden ze zadaných řetězců v odkazu. Zadáno ve formě seznamu. Řetězec nesmí obsahovat čárku.
+                    p Nepovinný parametr. Formát (řetězec1, řetězec2,...)
+                    p.p Př.: <b><i>www.zive.cz, clanek/</i></b>
+                li
+                    h4 Blacklist odkazů
+                    p Podobně jako Whitelist. Pokud je ale jeden z řetězců obsažen v odkazu, článek nepropustí.
+                    p Nepovinný parametr. Formát (řetězec1, řetězec2,...)
+                    p.p Př.: <b><i>/recenze, komercni</i></b>
+                li
+                    h4 Selektory špatného článku
+                    p Pokud zdrojový kód článku obsahuje jeden z těchto selektorů, článek nebude uznán.
+                    p Nepovinný parametr. Formát (selektor1, selektor2,...)
+                    p.p Př.: <b><i>.commercial, .recenze</i></b>
+                li
+                    h4 Selektory špatného článku s hodnotou
+                    p Pokud ve zdrojovém kódu článku je nalezen jeden ze zadaných selektorů, který má odpovídající hodnotu, nebude článek uznán.
+                    p Hodnota nesmí obsahovat symboly | a ,
+                    p Nepovinný parametr. Formát (selektor1 | hodnota1, selektor2 | hodnota2,...)
+                    p.p Př.: <b><i>.type | Komerční článek, #author | Reklama</i></b>
+
+    script(src="/public/help.js")

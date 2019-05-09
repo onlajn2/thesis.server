@@ -1,0 +1,9 @@
+extends admin.pug
+
+block data
+
+    select#mfile(name="name" required)
+    button#logbtn Stáhnout log
+    .log-block
+    
+    script(src="/public/log.js")

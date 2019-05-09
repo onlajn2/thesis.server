@@ -1,0 +1,308 @@
+extends admin.pug
+
+block data
+    
+    .colms
+        .colm
+            h2 Stahování
+            form#sub-req
+                .row
+                    label(for="id1") Název deníku
+                        span(title="Povinný parametr").req
+                        span.tooltip
+                            span.toolicon ?
+                            span.tooltext Název, pod kerým bude deník uložen
+                    input#id1(type="text", name="name", autocorrect="off", spellcheck="false", maxlength="20" required)
+
+                .row
+                    label(for="id2") Odkaz
+                        span(title="Povinný parametr").req
+                        span.tooltip
+                            span.toolicon ?
+                            span.tooltext Odkaz na stránku se články
+                    input#id2(type="url", name="link" autocorrect="off" spellcheck="false" required)
+                
+                .row
+                    label(for="id3") Kódování
+                        span(title="Povinný parametr").req
+                        span.tooltip
+                            span.toolicon ?
+                            span.tooltext Kódování stránky, vychozí hodnota je UTF-8
+                    select#id3(name="coding" required)
+                        option(value="win1250") Windows 1250
+                        option(value="win1251") Windows 1251
+                        option(value="win1252") Windows 1252
+                        option(value="utf8" selected="selected") UTF-8
+
+                span.group Stránkování
+
+                .row.line
+                    input#idr1(type="radio", name="paging", value="true", checked="true" required)
+                    label.fl(for="idr1") Ano
+                    input#idr2(type="radio", name="paging", value="false")
+                    label.fl(for="idr2") Ne
+                    
+                .blank
+                    .row
+                        label(for="id4") První strana
+                            span.tooltip
+                                span.toolicon ?
+                                span.tooltext Číslo stránky, na které začíná stránkování (stránka z odkazu)
+                        input#id4(type="text", name="firstPage" autocorrect="off" spellcheck="false")
+
+                    .row
+                        label(for="id5") Další strany (+)
+                            span.tooltip
+                                span.toolicon ?
+                                span.tooltext Hodnota, která se přičte k předchozí stránce<br>(např. 3 + 1 = 4)
+                        input#id5(type="text", name="nextPagePlus" autocorrect="off" spellcheck="false")
+
+                    .row
+                        label(for="id6") Řetězec před číslem stránky
+                            span.tooltip
+                                span.toolicon ?
+                                span.tooltext Symbol, nacházející se před číslem stránky v odkazu (vybere se poslední nalezený symbol)
+                        input#id6(type="text", name="pageSymbol" autocorrect="off" spellcheck="false")
+
+                    .row
+                        label(for="id7") Rozdíl první strany od ostatních
+                            span.tooltip
+                                span.toolicon ?
+                                span.tooltext V případě, že se první stránka článků liší od dalších, je k první straně (k odkazu) přidán tento řetězec
+                        input#id7(type="text", name="nextPage" autocorrect="off" spellcheck="false")
+
+                span.group Speciální nastavení
+
+                .row
+                    label(for="id8") Omezení počtu článků na stránku
+                        span.tooltip
+                            span.toolicon ?
+                            span.tooltext Speciální případ, omezí počet stáhnutých článku na jednu stránku<br>0 je bez omezení
+                    input#id8(type="text", name="limitSelector" autocorrect="off" spellcheck="false")
+
+                span.group Kategorie
+
+                .row.check
+                    label Kategorie článků (seznam)
+                        span(title="Povinný parametr").req
+                        span.tooltip
+                            span.toolicon ?
+                            span.tooltext Kategorie, do kterých budou přidány články z tohoto deníku<br>(minimálně 1 povinný výběr)
+                    select#multi(size=10, multiple)
+                        - for (var x = 0; x < categories.length; x++)
+                            if categories[x].ur !== "nezarazene"
+                                option(value="" + categories[x]._id)= categories[x].cz
+
+                span.group Nastavení článků
+
+                .row
+                    label(for="id10") Obálka jednoho článku
+                        span.tooltip
+                            span.toolicon ?
+                            span.tooltext Selektor obsahující obálku článku
+                    input#id10(type="text", name="parentSelector" autocorrect="off" spellcheck="false")
+
+                .row
+                    label(for="id11") Odkaz na článek
+                        span(title="Povinný parametr").req
+                        span.tooltip
+                            span.toolicon ?
+                            span.tooltext Selektor odkazu na článek
+                    input#id11(type="text", name="linkSelector" autocorrect="off" spellcheck="false")
+
+                .row
+                    label(for="id12") Obrázek
+                        span.tooltip
+                            span.toolicon ?
+                            span.tooltext Selektor ukázkového obrázku pro článek (musí být vyplněna obálka článku)
+                    input#id12(type="text", name="imageSelector" autocorrect="off" spellcheck="false")
+
+                .row
+                    label(for="id13") Atribut obrázku
+                        span.tooltip
+                            span.toolicon ?
+                            span.tooltext Atribut zvoleného obrázku (vychozí hodnota je src)
+                    input#id13(type="text", name="imageSelectorAttr" autocorrect="off" spellcheck="false")
+
+                .row
+                    label(for="id19") Více atributů
+                        span.tooltip
+                            span.toolicon ?
+                            span.tooltext Pokud atribut obsahuje více odkazů (např. data-src="odkaz1, odkaz2,..."), zaškrtněte toto políčko
+                    input#id19(type="checkbox", name="findInImage", value="true")
+
+                span.group Nastavení speciálních článků
+                    span.tooltip.big
+                        span.toolicon ?
+                        span.tooltext Hlavní stránka může obsahovat speciální formu článků, odlišných od běžných článků (vykonává se před běžnými články)
+
+                .row.line
+                    input#idr3(type="radio", name="specArt", value="true" required)
+                    label.fl(for="idr3") Ano
+                    input#idr4(type="radio", name="specArt", value="false", checked="checked")
+                    label.fl(for="idr4") Ne
+
+                .blank
+                    .row
+                        label(for="id14") Obálka jednoho článku
+                            span.tooltip
+                                span.toolicon ?
+                                span.tooltext Selektor obsahující obálku článku
+                        input#id14(type="text", name="specialParentSelector" autocorrect="off" spellcheck="false")
+
+                    .row
+                        label(for="id15") Odkaz na článek
+                            span.tooltip
+                                span.toolicon ?
+                                span.tooltext Selektor odkazu na článek
+                        input#id15(type="text", name="specialLinkSelector" autocorrect="off" spellcheck="false")
+
+                    .row
+                        label(for="id16") Obrázek
+                            span.tooltip
+                                span.toolicon ?
+                                span.tooltext Selektor ukázkového obrázku pro článek (musí být vyplněna obálka článku)
+                        input#id16(type="text", name="specialImageSelector" autocorrect="off" spellcheck="false")
+
+                    .row
+                        label(for="id17") Atribut obrázku
+                            span.tooltip
+                                span.toolicon ?
+                                span.tooltext Atribut zvoleného obrázku (vychozí hodnota je src)
+                        input#id17(type="text", name="specialIimageSelectorAttr", autocorrect="off", spellcheck="false")
+
+                    .row
+                        label(for="id18") Více atributů
+                            span.tooltip
+                                span.toolicon ?
+                                span.tooltext Pokud atribut obsahuje více odkazů (např. data-src="odkaz1, odkaz2,..."), zaškrtněte toto políčko
+                        input#id18(type="checkbox", name="specialFindInImage", value="true")
+
+                .row
+                    span.info * povinné parametry
+
+        .colm
+            h2 Parsování
+            form#sub-val
+                .row
+                    label(for="i1") Nadpis
+                        span(title="Povinný parametr").req
+                        span.tooltip
+                            span.toolicon ?
+                            span.tooltext Selektor nadpisu článku
+                    input#i1(type="text", name="titleSelector", autocorrect="off", spellcheck="false" required)
+                
+                .row
+                    label(for="i2") Úvodní text
+                        span(title="Povinný parametr").req
+                        span.tooltip
+                            span.toolicon ?
+                            span.tooltext Selektor úvodního textu
+                    input#i2(type="text", name="textSelector", autocorrect="off", spellcheck="false" required)
+                
+                .row.line
+                    label Je úvodní text součástí obsahu článku?
+                        span(title="Povinný parametr").req
+                    input#ir1(type="radio", name="perexIn", value="true" required)
+                    label.fl(for="ir1") Ano
+                    input#ir2(type="radio", name="perexIn", value="false", checked="checked")
+                    label.fl(for="ir2") Ne
+                
+                .row
+                    label(for="i4") Datum
+                        span(title="Povinný parametr").req
+                        span.tooltip
+                            span.toolicon ?
+                            span.tooltext Selektor data článku
+                    input#i4(type="text", name="dateSelector", autocorrect="off", spellcheck="false" required)
+                
+                .row
+                    label(for="i5") Obrázek
+                        span.tooltip
+                            span.toolicon ?
+                            span.tooltext Hlavní obrázek článku (nepovinný)
+                    input#i5(type="text", name="imageSelector" placeholder="Selektor obrázku", autocorrect="off", spellcheck="false")
+                    input#i55(type="text", name="imageSelectorAttr" placeholder="Atribut obrázku", autocorrect="off", spellcheck="false")
+                
+                .row
+                    label(for="i3") Obsah
+                        span(title="Povinný parametr").req
+                        span.tooltip
+                            span.toolicon ?
+                            span.tooltext Obsah článku, bude vybrán pouze text
+                    input#i3(type="text", name="content", autocorrect="off", spellcheck="false" required)
+                
+                .row
+                    label(for="i7") Selektory odstraněné z obsahu
+                        span.tooltip
+                            span.toolicon ?
+                            span.tooltext Z HTML kódu obsahu budou odstraněny tyto elementy<br>(selektor1, selktor2,...)
+                    input#i7(type="text", name="contentRemove", autocorrect="off", spellcheck="false")
+                
+                .row
+                    label(for="i6") Tagy
+                        span.tooltip
+                            span.toolicon ?
+                            span.tooltext Selektor pro výběr textu všech nalezených elementů
+                    input#i6(type="text", name="tags", autocorrect="off", spellcheck="false")
+
+                span.group Speciální nastavení
+                .row
+                    label(for="i8") Kategorie
+                        span(title="Povinný parametr, pokud je zadáno více kategorií").req2
+                        span.tooltip
+                            span.toolicon ?
+                            span.tooltext Řazení do kategorií podle části odkazu<br>řetězec1 : kategorie, řetězec2 : kategorie,...
+                    textarea#i8(type="text", name="categories", rows="5", autocorrect="off", spellcheck="false")
+                
+                .row
+                    label(for="i9") Whitelist odkazů
+                        span.tooltip
+                            span.toolicon ?
+                            span.tooltext Propustí pouze články, kde odkaz obsahuje jeden z těchto řetězců
+                    input#i9(type="text", name="okLinks", autocorrect="off", spellcheck="false")
+                
+                .row
+                    label(for="i10") Blacklist odkazů
+                        span.tooltip
+                            span.toolicon ?
+                            span.tooltext Pokud odkaz článku obsahuje jeden z těchto řetězců, bude článek vyřazen
+                    input#i10(type="text", name="badLinks", autocorrect="off", spellcheck="false")
+                    
+                span.group Selektory špatného článku
+                .row
+                    label(for="i11") Selektor
+                        span.tooltip
+                            span.toolicon ?
+                            span.tooltext Pokud stránka článku obsahuje následující element, bude článek vyřazen<br>selektor1, selektor2,...
+                    input#i11(type="text", name="removeSelectors", autocorrect="off", spellcheck="false")
+                
+                .row
+                    label(for="i12") Selektor s hodnotou
+                        span.tooltip
+                            span.toolicon ?
+                            span.tooltext Pokud stránka článku obsahuje následující element se zadanou hodnotou, bude článek vyřazen<br>selektor1 | hodnota1, selektor2 | hodnota2,...
+                    textarea#i12(type="text", name="removeValueSelectors", rows="5", autocorrect="off", spellcheck="false")
+
+                .row
+                    span.info * povinné parametry
+                    span.info ** povinné za určité podmínky
+
+        .colm
+            h2 Nástroje
+
+            #empty
+                button#sub-test Stáhnout ukázkový článek
+                button#sub-chec Ověřit vyplněné údaje
+                button#sub-save Uložit deník
+            
+            .mega-loading
+                .lds-dual-ring#toogle2
+
+    #sample-admin
+        .side-header
+            h3#side-name Nástroje
+            span.close &#10005;
+        .side-content
+
+    script(src="/public/add.js")

@@ -1,0 +1,35 @@
+extends admin.pug
+
+block data
+    
+    select#mfile(name="name" required)
+        - for (var x = 0; x < journals.length; x++)
+            option(value="" + journals[x])= journals[x]
+
+    button#logbtn Stáhnout články
+    
+    .center-block-2
+        .lds-dual-ring
+
+    .block-tool
+        select#sort
+            option(value="1" selected="selected") Od nejnovějších
+            option(value="2") Od nejstarších
+            option(value="3") Podle názvu vzestupně
+            option(value="4") Podle názvu sestupně
+            option(value="5") Podle kategorie vzestupně
+            option(value="6") Podle kategorie sestupně
+        
+        .empt
+            input#search(type="text", placeholder="Vyhledat v nadpisech...", spellcheck="false")
+            button#searb Vyhledat
+            button#delsear Zrušit vyhledávání
+
+        .emptt
+            button#remsel Smazat vybrané
+            button#remall Smazat vše
+
+    .log-block
+
+
+    script(src="/public/delete.js")
